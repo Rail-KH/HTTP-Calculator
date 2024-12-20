@@ -1,6 +1,7 @@
 package calculation
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -36,7 +37,7 @@ func Сalculation(operations []string) ([]string, error) {
 					x, err_x := strconv.ParseFloat(operations[i-1], 64)
 					y, err_y := strconv.ParseFloat(operations[i+1], 64)
 					if err_x != nil || err_y != nil {
-						return []string{"error:"}, UnprocessableEntity
+						return []string{"error:"}, errors.New("unprocessable_entity")
 					}
 					switch operations[i] {
 					case "*":
@@ -48,7 +49,7 @@ func Сalculation(operations []string) ([]string, error) {
 						}
 					case "/":
 						if y == 0 {
-							return []string{"error:"}, UnprocessableEntity
+							return []string{"error:"}, errors.New("internal_server_error")
 						}
 						elem := append(operations[:i-1], fmt.Sprintf("%f", x/y))
 						if len(operations)-1 > i+2 {
@@ -78,7 +79,7 @@ func Сalculation(operations []string) ([]string, error) {
 					x, err_x := strconv.ParseFloat(operations[i-1], 64)
 					y, err_y := strconv.ParseFloat(operations[i+1], 64)
 					if err_x != nil || err_y != nil {
-						return []string{"error:"}, UnprocessableEntity
+						return []string{"error:"}, errors.New("unprocessable_entity")
 					}
 					switch operations[i] {
 					case "+":
@@ -135,14 +136,14 @@ func SettingPriorities(expression string) ([]string, error) {
 			flag = true
 		}
 		if !flag {
-			return []string{"error:"}, UnprocessableEntity
+			return []string{"error:"}, errors.New("unprocessable_entity")
 		}
 		if !first_op {
 			if sumbols[string(char)] == -1 || sumbols[string(char)] == 2 {
 				current_simbol = string(char)
 
 			} else {
-				return []string{"error:"}, UnprocessableEntity
+				return []string{"error:"}, errors.New("unprocessable_entity")
 			}
 			first_op = true
 		} else {
@@ -153,7 +154,7 @@ func SettingPriorities(expression string) ([]string, error) {
 					operations = append(operations, current_simbol)
 					current_simbol = string(char)
 				} else if sumbols[string(char)] == 2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == -2 && PunctumCounter(current_simbol) == 0 {
 					current_simbol += string(char)
 				}
@@ -163,33 +164,33 @@ func SettingPriorities(expression string) ([]string, error) {
 					operations = append(operations, current_simbol)
 					current_simbol = string(char)
 				} else if sumbols[string(char)] == 0 || sumbols[string(char)] == 1 || sumbols[string(char)] == 3 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == 2 {
 					operations = append(operations, current_simbol)
 					current_simbol = string(char)
 				} else if sumbols[string(char)] == -2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				}
 			} else if sumbols[string(current_simbol[len(current_simbol)-1])] == 3 {
 				if sumbols[string(char)] == -1 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == 0 || sumbols[string(char)] == 1 || sumbols[string(char)] == 3 {
 					operations = append(operations, current_simbol)
 					current_simbol = string(char)
 				} else if sumbols[string(char)] == 2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == -2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				}
 			} else if sumbols[string(current_simbol[len(current_simbol)-1])] == -2 {
 				if sumbols[string(char)] == -1 && PunctumCounter(current_simbol) == 1 {
 					current_simbol += string(char)
 				} else if sumbols[string(char)] == 0 || sumbols[string(char)] == 1 || sumbols[string(char)] == 3 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == 2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				} else if sumbols[string(char)] == -2 {
-					return []string{"error:"}, UnprocessableEntity
+					return []string{"error:"}, errors.New("unprocessable_entity")
 				}
 			}
 		}
@@ -197,7 +198,7 @@ func SettingPriorities(expression string) ([]string, error) {
 	if sumbols[string(current_simbol[len(current_simbol)-1])] == -1 || sumbols[string(current_simbol[len(current_simbol)-1])] == 3 {
 		operations = append(operations, current_simbol)
 	} else {
-		return []string{"error:"}, UnprocessableEntity
+		return []string{"error:"}, errors.New("unprocessable_entity")
 	}
 
 	return operations, nil
@@ -259,7 +260,7 @@ func Calcul(operations []string) (string, error) {
 
 			}
 		} else {
-			return "", UnprocessableEntity
+			return "", errors.New("unprocessable_entity")
 		}
 	}
 	answer, err := Сalculation(operations)
@@ -271,7 +272,7 @@ func Calcul(operations []string) (string, error) {
 
 func Calc(expression string) (float64, error) {
 	if strings.Replace(expression, " ", "", -1) == "" {
-		return 0, UnprocessableEntity
+		return 0, errors.New("unprocessable_entity")
 	}
 	operations, err1 := SettingPriorities(expression)
 	if err1 != nil {
