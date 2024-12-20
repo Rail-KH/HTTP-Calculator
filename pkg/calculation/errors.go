@@ -1,8 +1,10 @@
 package calculation
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
-	ErrInvalidExpression = errors.New("invalid expression")
-	ErrDivisionByZero    = errors.New("division by zero")
+	UnprocessableEntity = errors.New("Unprocessable Entity")
+	InternalServerError = errors.New("Internal Server Error")
 )
