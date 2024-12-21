@@ -48,7 +48,9 @@ func CalcHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json_bytes, _ := json.Marshal(ServerError{Error: "Bad Request"})
+		w.Write(json_bytes)
 		return
 	}
 

@@ -49,7 +49,7 @@ func Сalculation(operations []string) ([]string, error) {
 						}
 					case "/":
 						if y == 0 {
-							return []string{"error:"}, errors.New("internal_server_error")
+							return []string{"error:"}, errors.New("unprocessable_entity")
 						}
 						elem := append(operations[:i-1], fmt.Sprintf("%f", x/y))
 						if len(operations)-1 > i+2 {
