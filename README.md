@@ -4,44 +4,52 @@
 
 # Структура проекта
 
-cmd/ — точка входа приложения.
+### cmd/ — точка входа приложения.
 
-internal/ — внутренняя логика и модули приложения.
+### internal/ — внутренняя логика и модули приложения.
 
-pkg/ — вспомогательные пакеты.
+### pkg/ — вспомогательные пакеты.
 
 # Инструкция по запуску:
 
-Убедитесь, что у вас установлен Go (желательно версия 1.23.1 или выше).
+#### Убедитесь, что у вас установлен Go (желательно версия 1.23.1 или выше).
 
-Скопируйте репозиторий:
+## Скопируйте репозиторий:
 
 git clone https://github.com/Rail-KH/HTTP-Calculator
 
 cd HTTP-Calculator
 
 
-Запустите сервер:
+## Запустите сервер:
 
 go run ./cmd/main.go
 
-Сервер будет доступен по адресу http://localhost:8080/api/v1/calculate
+#### Сервер будет доступен по адресу http://localhost:8080/api/v1/calculate
 
 
 # Примеры использования(запрос через командную строку):
 
-1) Успешный запрос:
+## 1) Успешный запрос:
 
    Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\\"expression\\": \\"1+1\\"}""
 
    Ответ: {"result":"2"}
 
-3) Ошибка 422 (невалидное выражение):
+## 2) Ошибка 400 (некорректный запрос):
+   
+   Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{"expression": "1+1"}""
+
+   Ответ: {"error":"Bad Request"}
+
+## 3) Ошибка 422 (невалидное выражение):
    
    Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\\"expression\\": \\"1+1*\\"}""
    
    Ответ: {"error":"Expression is not valid"}
 
-4) Ошибка 500 (неизвестная ошибка сервера):
+## 4) Ошибка 500 (неизвестная ошибка сервера):
    
    Ответ: {"error":"Internal server error"}
+
+#### Для запросов можно использовать программу postman
