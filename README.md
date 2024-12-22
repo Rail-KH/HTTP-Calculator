@@ -20,6 +20,7 @@ git clone https://github.com/Rail-KH/HTTP-Calculator
 
 cd HTTP-Calculator
 
+
 Запустите сервер:
 
 go run ./cmd/main.go
@@ -31,12 +32,16 @@ go run ./cmd/main.go
 
 1) Успешный запрос:
 
-Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"1+1\"}""
+   Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"1+1\"}""
 
-Ответ: {"result":"2"}
+   Ответ: {"result":"2"}
 
-2) Ошибка 422 (невалидное выражение):
+3) Ошибка 422 (невалидное выражение):
+   
+   Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"1+1*\"}""
+   
+   Ответ: {"error":"Expression is not valid"}
 
-Запрос: curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"1+1*\"}""
-
-Ответ: {"error":"Expression is not valid"}
+4) Ошибка 500 (неизвестная ошибка сервера):
+   
+   Ответ: {"error":"Internal server error"}
